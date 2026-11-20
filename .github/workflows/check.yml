@@ -18,3 +18,5 @@ jobs:
         with:
           build: 'true'
           build-args: '--wfail'
+          leanchecker: 'true'
+          leanchecker-args: '--fresh Palindromo'

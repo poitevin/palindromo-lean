@@ -21,12 +21,13 @@ Con [Elan](https://github.com/leanprover/elan) y Node.js:
 
 ```sh
 node verify-source.mjs
-lake build
+lake build --wfail
+lake env leanchecker --fresh Palindromo
 ```
 
-`lean-toolchain` fija la versión de Lean. El proyecto usa su biblioteca estándar. La compilación comprueba los teoremas e imprime sus dependencias axiomáticas.
+`lean-toolchain` fija la versión de Lean. El núcleo evalúa con `decide +kernel` las tres comprobaciones finitas sobre los versos, cuyo conjunto de axiomas es vacío. Los dos teoremas sobre la obra completa dependen únicamente de `propext`, el axioma de extensionalidad proposicional. La compilación comprueba esas dependencias y `leanchecker --fresh` vuelve a comprobar las demostraciones en un entorno nuevo del núcleo. [Referencia de Lean sobre la validación de demostraciones](https://lean-lang.org/doc/reference/latest/ValidatingProofs/)
 
-[`versos.js`](versos.js) contiene una copia exacta del [archivo servido por el lector](https://pedropoitevin.com/es/interactivos/palindromo-app/versos.js) el 20 de noviembre de 2026. El verificador comprueba su SHA-256 y que [los datos de Lean](Palindromo/Versos.lean) reproducen sus cien pares en el mismo orden. Para comparar también con el archivo servido en el momento de la verificación:
+[`versos.js`](versos.js) contiene una copia exacta del [archivo servido por el lector](https://pedropoitevin.com/es/interactivos/palindromo-app/versos.js) el 20 de noviembre de 2026. El verificador comprueba su SHA-256 y que [los datos de Lean](Palindromo/Versos.lean) reproducen sus cien pares, carácter por carácter, en el mismo orden. Para comparar también con el archivo servido en el momento de la verificación:
 
 ```sh
 curl -fLsS https://pedropoitevin.com/es/interactivos/palindromo-app/versos.js -o /tmp/palindromo-versos-publicados.js

@@ -23,16 +23,21 @@ for (const pair of pairs) {
   }
 }
 
-const rows = pairs.map(([first, second]) =>
-  `  (${JSON.stringify(first)}, ${JSON.stringify(second)})`);
+const leanChars = verse => '[' + Array.from(verse, char =>
+  char === "'" ? "'\\''" : `'${char}'`).join(', ') + ']';
+const groups = Array.from({ length: 10 }, (_, group) => {
+  const rows = pairs.slice(group * 10, (group + 1) * 10).map(([first, second]) =>
+    `    (${leanChars(first)}, ${leanChars(second)})`);
+  return `  #v[\n${rows.join(',\n')}\n  ]`;
+});
 const generated = `-- Generated from versos.js by verify-source.mjs.
 import Std
 
 namespace Palindromo
 
 /-- Verse pairs in the order used by the published reader. -/
-def versePairs : Vector (String × String) 100 := #v[
-${rows.join(',\n')}
+def versePairs : Vector (Vector (List Char × List Char) 10) 10 := #v[
+${groups.join(',\n')}
 ]
 
 end Palindromo
